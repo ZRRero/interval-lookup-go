@@ -23,24 +23,13 @@ func (receiver *Tree[T]) SearchFirstInterval(value T, includeInit, includeEnd bo
 	return receiver.root.SearchFirstInterval(value, includeInit, includeEnd)
 }
 
-func GenerateTree[T constraints.Ordered](intervals []IntervalWithValue[T], detectOverlapping bool) (Tree[T], error) {
+func GenerateTree[T constraints.Ordered](intervals IntervalsWithValue[T], searchOverlapping bool) (Tree[T], error) {
 	slices.SortFunc(intervals, func(i, j IntervalWithValue[T]) bool {
 		return i.Compare(j) <= 0
 	})
-	if detectOverlapping && DetectOverlapping(intervals) {
+	if searchOverlapping && intervals.detectOverlapping() {
 		return Tree[T]{}, errorIntervalsOverlapped{}
 	}
 	root := GenerateLeaf(intervals, 0, len(intervals))
 	return Tree[T]{root: root}, nil
-}
-
-func DetectOverlapping[T constraints.Ordered](sortedIntervals []IntervalWithValue[T]) bool {
-	compare := sortedIntervals[0]
-	for index, value := range sortedIntervals {
-		if index != 0 && compare.IsOverlapped(&value) {
-			return true
-		}
-		compare = value
-	}
-	return false
 }

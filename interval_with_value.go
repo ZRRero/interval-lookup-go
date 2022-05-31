@@ -12,13 +12,13 @@ type IntervalWithValue[T constraints.Ordered] struct {
 
 func GenerateIntervalWithValue[T constraints.Ordered](init, end T, value any) (IntervalWithValue[T], error) {
 	interval := IntervalWithValue[T]{init: init, end: end, value: value}
-	if err := interval.Validate(); err != nil {
+	if err := interval.validate(); err != nil {
 		return IntervalWithValue[T]{}, err
 	}
 	return interval, nil
 }
 
-func (receiver *IntervalWithValue[T]) Validate() error {
+func (receiver *IntervalWithValue[T]) validate() error {
 	if receiver.init > receiver.end {
 		return errorInvalidInterval[T]{receiver.init, receiver.end}
 	}
