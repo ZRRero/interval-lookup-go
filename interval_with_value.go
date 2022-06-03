@@ -38,7 +38,7 @@ func (receiver *IntervalWithValue[T]) Compare(other IntervalWithValue[T]) int {
 	return 0
 }
 
-func (receiver *IntervalWithValue[T]) IsOverlapped(other *IntervalWithValue[T]) bool {
+func (receiver *IntervalWithValue[T]) IsOverlapped(other IntervalWithValue[T]) bool {
 	return !(receiver.init >= other.end || receiver.end <= other.init)
 }
 
